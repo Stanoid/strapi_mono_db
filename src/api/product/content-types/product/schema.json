@@ -31,22 +31,16 @@
       "type": "text"
     },
     "image": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ]
+      "type": "string"
     },
     "colors": {
       "type": "json"
     },
     "stocks": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::stock.stock"
+      "relation": "manyToMany",
+      "target": "api::stock.stock",
+      "inversedBy": "products"
     }
   }
 }

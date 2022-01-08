@@ -19,6 +19,12 @@
     },
     "stock_price": {
       "type": "float"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product.product",
+      "inversedBy": "stocks"
     }
   }
 }
