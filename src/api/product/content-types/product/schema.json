@@ -30,9 +30,6 @@
     "description": {
       "type": "text"
     },
-    "image": {
-      "type": "string"
-    },
     "colors": {
       "type": "json"
     },
@@ -41,6 +38,9 @@
       "relation": "manyToMany",
       "target": "api::stock.stock",
       "inversedBy": "products"
+    },
+    "image": {
+      "type": "json"
     }
   }
 }
