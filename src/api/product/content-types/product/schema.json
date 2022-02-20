@@ -41,6 +41,18 @@
     },
     "image": {
       "type": "json"
+    },
+    "vendor": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "products"
+    },
+    "group": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::group.group",
+      "mappedBy": "product"
     }
   }
 }

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "promo",
     "pluralName": "promos",
-    "displayName": "promo"
+    "displayName": "promo",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -26,28 +27,16 @@
     "twitter_link": {
       "type": "string"
     },
-    "image": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ],
-      "type": "media",
-      "multiple": true
-    },
-    "resume": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos"
-      ],
-      "type": "media",
-      "multiple": true
-    },
     "job": {
       "type": "string"
     },
     "project_desc": {
+      "type": "text"
+    },
+    "image": {
+      "type": "text"
+    },
+    "resume": {
       "type": "text"
     }
   }
