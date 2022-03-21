@@ -35,6 +35,14 @@ module.exports = createCoreController('api::test.test', ({ strapi }) =>  ({
         return sanitizedEntity;
            break;
 
+             case "getUserData":
+              const udata = await strapi.plugins[
+                'users-permissions'
+              ].services.jwt.getToken(ctx);
+              return udata;
+           
+           break;
+
            default:
                return "no funciton detected";
                break

@@ -21,23 +21,11 @@
       "target": "api::catagory.catagory",
       "inversedBy": "products"
     },
-    "orders": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::order.order",
-      "inversedBy": "products"
-    },
     "description": {
       "type": "text"
     },
     "colors": {
       "type": "json"
-    },
-    "stocks": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::stock.stock",
-      "inversedBy": "products"
     },
     "image": {
       "type": "json"
@@ -52,6 +40,18 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::group.group",
+      "mappedBy": "product"
+    },
+    "stock": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::stock.stock",
+      "mappedBy": "product"
+    },
+    "subs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
       "mappedBy": "product"
     }
   }

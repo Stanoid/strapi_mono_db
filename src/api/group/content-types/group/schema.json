@@ -38,7 +38,7 @@
     },
     "customers": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "reg_groups"
     }

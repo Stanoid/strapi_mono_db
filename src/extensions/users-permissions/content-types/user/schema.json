@@ -63,12 +63,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "orders": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::order.order",
-      "inversedBy": "users_permissions_users"
-    },
     "products": {
       "type": "relation",
       "relation": "oneToMany",
@@ -83,9 +77,18 @@
     },
     "reg_groups": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::group.group",
       "inversedBy": "customers"
+    },
+    "type": {
+      "type": "integer"
+    },
+    "orders": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::order.order",
+      "mappedBy": "user"
     }
   }
 }

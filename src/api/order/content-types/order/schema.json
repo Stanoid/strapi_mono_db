@@ -4,37 +4,34 @@
   "info": {
     "singularName": "order",
     "pluralName": "orders",
-    "displayName": "order"
+    "displayName": "order",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "paid",
-        "unpaid"
-      ]
-    },
-    "total": {
-      "type": "float"
-    },
-    "checkout_session": {
-      "type": "string"
-    },
-    "products": {
+    "user": {
       "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::product.product",
-      "mappedBy": "orders"
-    },
-    "users_permissions_users": {
-      "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "orders"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product.product",
+      "inversedBy": "subs"
+    },
+    "status": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "float"
+    },
+    "commission": {
+      "type": "float"
     }
   }
 }
