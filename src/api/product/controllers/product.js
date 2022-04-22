@@ -65,6 +65,61 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
 
   // },
 
+
+  async create(ctx) {
+
+    let regid = null;
+
+    if (ctx.request && ctx.request.header && ctx.request.header.authorization) {
+      try {
+        const udata = await strapi.plugins[
+          "users-permissions"
+        ].services.jwt.getToken(ctx);
+
+        regid = udata.id;
+      } catch (err) {
+        return "unauthorized request catch triggred";
+      }
+
+      var url = require("url");
+      var url_parts = url.parse(ctx.request.url, true);
+      var query = url_parts.query;
+      switch (query.func) {
+        case "addProduct":
+
+      
+            const entity = await strapi.service("api::product.product").create({
+                data:{
+                   vendor:regid,
+                   name:ctx.request.body.data.name,
+                   description:ctx.request.body.data.description,
+                   stock:ctx.request.body.data.stock,
+                   colors:ctx.request.body.data.colors,
+                   catagories:ctx.request.body.data.catagories,
+                   image:ctx.request.body.data.image,
+                  
+                }
+         });
+            
+        
+      
+            return entity
+          break;
+
+        default:
+          return "Defaulting from Authed, You screwed up badly fam (: ";
+          break;
+      }
+    } else {
+     return "unauthorized access."
+    }
+
+
+
+  
+},
+
+
   async find(ctx) {
     let regid = null;
 
@@ -85,6 +140,13 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
       switch (query.func) {
         case "getVendorProducts":
           const res = await strapi.db.query("api::product.product").findMany({
+            where:{
+                   
+              vendor:{
+                id:regid
+              },
+             
+              },
             select: [
               "name",
               "description",
@@ -94,7 +156,7 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
               "publishedAt",
             ],
             populate: [
-              "stocks",
+              "stock",
               "catagories",
               "product.stocks",
               "vendor",
@@ -102,16 +164,12 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
             ],
           });
 
-          let newres = [];
+         
 
-          for (let i = 0; i < res.length; i++) {
-            if (res[i].vendor.id == regid) {
-              newres.push(res[i]);
-            }
-          }
+         
 
-          const sanitizedEntity = await this.sanitizeOutput(newres, ctx);
-          return sanitizedEntity;
+          // const sanitizedEntity = await this.sanitizeOutput(newres, ctx);
+          return res;
           break;
 
         default:
@@ -167,6 +225,18 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
 
         break;
 
+        case "getBasicPrice":
+
+          const entityb = await strapi.service("api::product.product").findOne(id, {
+              select: ["name",],
+              populate: ["stock"],
+            });
+            const sanitizedEntityb = await this.sanitizeOutput(entityb, ctx);
+        
+            return sanitizedEntityb;
+  
+          break;
+
          default:
 
         // const entityd = await strapi.service("api::product.product").findOne(id, {
@@ -178,6 +248,116 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
         //   return this.transformResponse(sanitizedEntityd);
 
         break;
+    }
+
+    
+
+   
+  },
+  async update(ctx) {
+    let regid = null;
+
+    if (ctx.request && ctx.request.header && ctx.request.header.authorization) {
+      try {
+        const udata = await strapi.plugins[
+          "users-permissions"
+        ].services.jwt.getToken(ctx);
+
+        regid = udata.id;
+      } catch (err) {
+        return "unauthorized request catch triggred";
+      }
+
+      var url = require("url");
+      var url_parts = url.parse(ctx.request.url, true);
+      var query = url_parts.query;
+      switch (query.func) {
+        case "updateProduct":
+
+          const entityb = await strapi.service("api::product.product").findOne(ctx.request.body.data.id, {
+            select: ["name",],
+            populate: ["vendor"],
+          });
+
+          if(entityb.vendor.id===regid){
+
+            const reso = await strapi.db.query("api::stock.stock").update({
+              where:{
+             id:ctx.request.body.data.stockid
+              },
+              data:{
+  
+                stock:ctx.request.body.data.nstock,
+                price:ctx.request.body.data.nprice,
+                comm:ctx.request.body.data.ncomm,
+                
+               
+              }
+              });
+  
+              const resprod = await strapi.db.query("api::product.product").update({
+                where:{
+               id:ctx.request.body.data.id
+                },
+                data:{
+    
+                  name:ctx.request.body.data.name,
+                  description:ctx.request.body.data.description,
+                  colors:ctx.request.body.data.colors,
+                  catagories:ctx.request.body.data.catagories,
+                  
+                 
+                }
+                });
+
+                return resprod;
+
+
+          }else{
+            return "authed but dosnt belong to this user"
+          }
+         
+     return entityb
+           
+
+
+          const reso = await strapi.db.query("api::stock.stock").update({
+            where:{
+           id:ctx.request.body.data.stockid
+            },
+            data:{
+
+              stock:ctx.request.body.data.nstock,
+              price:ctx.request.body.data.nprice,
+              comm:ctx.request.body.data.ncom,
+              
+             
+            }
+            });
+
+            const resprod = await strapi.db.query("api::product.product").update({
+              where:{
+             id:ctx.request.body.data.id
+              },
+              data:{
+  
+                name:ctx.request.body.data.name,
+                description:ctx.request.body.data.description,
+                colors:ctx.request.body.data.colors,
+                catagories:ctx.request.body.data.catagories,
+                
+               
+              }
+              });
+
+          break;
+
+        default:
+          return "Defaulting from Authed, You screwed up badly fam (: ";
+          break;
+      }
+    } else {
+     return "Unaothed"
     }
 
     

@@ -32,6 +32,27 @@
     },
     "commission": {
       "type": "float"
+    },
+    "sale_price": {
+      "type": "float"
+    },
+    "buyers_name": {
+      "type": "string"
+    },
+    "buyers_address": {
+      "type": "string"
+    },
+    "buyers_phone": {
+      "type": "biginteger"
+    },
+    "qty": {
+      "type": "integer"
+    },
+    "dby": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "dorders"
     }
   }
 }

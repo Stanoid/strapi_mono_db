@@ -4,6 +4,7 @@
  *  order controller
  */
 
+
 const { createCoreController } = require('@strapi/strapi').factories;
 
 
@@ -33,12 +34,16 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
            
                 const res = await strapi.db.query("api::order.order").findMany({
                   where:{
+                   
                   user:{
                     id:regid
-                  }
                   },
-                    select: ["price", "commission","status"],
-                    populate: ["user", "product"],
+                  $not:{
+                  status:9
+                  },
+                  },
+                    select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","qty","sale_price"],
+                    populate: ["user", "product","product.stock"],
                   });
 
                   let newarr = [];
@@ -53,7 +58,63 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           
                 return res
               break;
+
+              case "getVendorOrders":
+
+           
+                const resv = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                   
+                  product:{
+                   vendor:{
+                     id:regid
+                   }
+                  },
+                  $not:{
+                  status:9
+                  },
+                  },
+                    select: ["price", "commission","status","qty"],
+                    populate: ["user", "product","product.stock"],
+                  });
+                return resv
+              break;
+
+              case "getDeliveryOrders":
+
+           
+                const resd = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                   
+                
+                  status:3
+                 
+                  },
+                  select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","qty","sale_price"],
+                  populate: ["user","vendor","product.vendor", "product","product.stock"],
+                  });
+                return resd
+              break;
     
+
+              case "getDeliveredOrders":
+
+           
+                const resdd = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                   
+                
+                  status:4
+                 
+                  },
+                  select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","qty","sale_price"],
+                  populate: ["user","product.vendor", "product","product.stock"],
+                  });
+                return resdd
+              break;
+    
+
+
             default:
               return "Defaulting from Authed, You screwed up badly fam (: ";
               break;
@@ -89,7 +150,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           var query = url_parts.query;
           switch (query.func) {
             case "orderInit":
-
+          let ress;
             for (let i = 0; i < ctx.request.body.data.length; i++) {
                 const entity = await strapi.service("api::order.order").create({
                     data:{
@@ -99,11 +160,13 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                        price:ctx.request.body.data[i].price,
                        commission:ctx.request.body.data[i].commission,
                     }
+                   
              });
+             ress=entity
                 
             }
           
-                return "done"
+                return ress
               break;
     
             default:
@@ -117,8 +180,240 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
 
       
-    }
+    },
 
+
+    
+    async update(ctx) {
+
+      let regid = null;
+
+      if (ctx.request && ctx.request.header && ctx.request.header.authorization) {
+        try {
+          const udata = await strapi.plugins[
+            "users-permissions"
+          ].services.jwt.getToken(ctx);
+  
+          regid = udata.id;
+        } catch (err) {
+          return "unauthorized request catch triggred"+ err;
+        }
+  
+        var url = require("url");
+        var url_parts = url.parse(ctx.request.url, true);
+        var query = url_parts.query;
+        switch (query.func) {
+          case "makeSale":
+
+            const res = await strapi.db.query("api::order.order").findMany({
+              where:{
+             id:query.order
+              },
+                select: ["price"],
+                populate: ["user"],
+              });
+
+           
+
+              if(res[0].user.id===regid){
+             
+                const reso = await strapi.db.query("api::order.order").update({
+                  where:{
+                 id:query.order
+                  },
+                  data:{
+                    status:2,
+                    sale_price:ctx.request.body.data.salePrice,
+                    buyers_name:ctx.request.body.data.bName,
+                    buyers_phone:ctx.request.body.data.bPhone,
+                    buyers_address:ctx.request.body.data.bAdd,
+                    qty:ctx.request.body.data.qty,
+                  }
+                  });
+
+                  return reso
+
+              }else{
+                return "unauthed"
+              }
+
+          
+        
+            
+            break;
+
+
+            case "cancelSale":
+
+
+  
+              const ress = await strapi.db.query("api::order.order").findMany({
+                where:{
+               id:query.order
+                },
+                  select: ["price"],
+                  populate: ["user"],
+                });
+  
+            
+                if(ress[0].user.id===regid){
+               
+                  const resoa = await strapi.db.query("api::order.order").update({
+                    where:{
+                   id:query.order
+                    },
+                    data:{
+                      status:1,
+                      sale_price:0,
+                      buyers_name:"",
+                      buyers_phone:"",
+                      buyers_address:"",
+                      qty:0,
+                    }
+                    });
+  
+                    return resoa
+  
+                }else{
+                  return "unauthed"
+                }
+  
+            
+          
+              
+              break;
+
+              case "deliverOrder":
+
+
+  
+                const ressd = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                 id:query.order
+                  },
+                    select: ["price"],
+                    populate: ["user"],
+                  });
+    
+              
+                 
+                 
+                    const resoad = await strapi.db.query("api::order.order").update({
+                      where:{
+                     id:query.order
+                      },
+                      data:{
+                     status:4,
+                        dby:regid,
+                      }
+                      });
+    
+                      return resoad
+    
+                
+    
+              
+            
+                
+                break;
+  
+
+              case "cancelSaleVendor":
+
+
+  
+                const ressv = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                 id:query.order
+                  },
+                    select: ["price"],
+                    populate: ["user","product","product.vendor"],
+                  });
+    
+               
+    
+                  if(ressv[0].product.vendor.id===regid){
+                 
+                    const resoa = await strapi.db.query("api::order.order").update({
+                      where:{
+                     id:query.order
+                      },
+                      data:{
+                        status:8,
+                        sale_price:0,
+                        buyers_name:"",
+                        buyers_phone:"",
+                        buyers_address:"",
+                        qty:0,
+                      }
+                      });
+    
+                      return resoa
+    
+                  }else{
+                    return "unauthed"
+                  }
+    
+              
+            
+                
+                break;
+  
+
+              case "removeOrder":
+
+
+  
+                const ressa = await strapi.db.query("api::order.order").findMany({
+                  where:{
+                 id:query.order
+                  },
+                    select: ["price"],
+                    populate: ["user"],
+                  });
+    
+               
+    
+                  if(ressa[0].user.id===regid){
+                 
+                    const resoai = await strapi.db.query("api::order.order").update({
+                      where:{
+                     id:query.order
+                      },
+                      data:{
+                        status:9,
+                        sale_price:0,
+                        buyers_name:"",
+                        buyers_phone:"",
+                        buyers_address:"",
+                        qty:0,
+                      }
+                      });
+    
+                      return resoai
+    
+                  }else{
+                    return "unauthed"
+                  }
+    
+              
+            
+                
+                break;
+    
+  
+          default:
+            return "Defaulting from Authed, You screwed up badly fam (: ";
+            break;
+        }
+      } else {
+       return "unauthorized access."
+      }
+
+
+
+    
+  }
   }));
   
  
