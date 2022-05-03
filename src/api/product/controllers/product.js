@@ -87,6 +87,7 @@ module.exports = createCoreController("api::product.product", ({ strapi }) => ({
       switch (query.func) {
         case "addProduct":
 
+       console.log("heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere"+regid+ctx.request.body.data)
       
             const entity = await strapi.service("api::product.product").create({
                 data:{
