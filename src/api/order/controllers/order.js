@@ -42,7 +42,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                   status:9
                   },
                   },
-                    select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","qty","sale_price"],
+                    select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","buyer_backup_number","qty","sale_price"],
                     populate: ["user", "product","product.stock"],
                   });
 
@@ -90,7 +90,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                   status:3
                  
                   },
-                  select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","qty","sale_price"],
+                  select: ["price", "commission","status","buyers_name","buyer_backup_number","buyers_address","buyers_phone","qty","sale_price"],
                   populate: ["user","vendor","product.vendor", "product","product.stock"],
                   });
                 return resd
@@ -226,7 +226,9 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                     sale_price:ctx.request.body.data.salePrice,
                     buyers_name:ctx.request.body.data.bName,
                     buyers_phone:ctx.request.body.data.bPhone,
+                    buyer_backup_number:ctx.request.body.data.bbPhone,
                     buyers_address:ctx.request.body.data.bAdd,
+
                     qty:ctx.request.body.data.qty,
                   }
                   });

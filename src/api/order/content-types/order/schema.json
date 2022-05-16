@@ -53,6 +53,9 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "dorders"
+    },
+    "buyer_backup_number": {
+      "type": "string"
     }
   }
 }
