@@ -95,6 +95,12 @@
       "relation": "oneToMany",
       "target": "api::order.order",
       "mappedBy": "dby"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "social": {
+      "type": "json"
     }
   }
 }
