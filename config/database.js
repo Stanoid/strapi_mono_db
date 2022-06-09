@@ -2,16 +2,16 @@ module.exports = ({ env }) => ({
  connection: {
     client: 'mysql',
     connection: {
-      host: env('DATABASE_HOST', '156.67.72.51'),
+      host: env('DATABASE_HOST', '185.166.188.103'),
       port: env.int('DATABASE_PORT', 3306),
-      database: env('DATABASE_NAME', 'u897671277_strapi'),
-      user: env('DATABASE_USERNAME', 'u897671277_stanoid'),
-      password: env('DATABASE_PASSWORD', '11235813mJ'),
+      database: env('DATABASE_NAME', 'u985780343_bendari'),
+      user: env('DATABASE_USERNAME', 'u985780343_stanoid'),
+      password: env('DATABASE_PASSWORD', 'lH6*@W@!:7['),
       ssl: env.bool('DATABASE_SSL', true),
     },
     
   },
-  
+
   // connection: {
   //   client: 'mysql',
   //   connection: {
