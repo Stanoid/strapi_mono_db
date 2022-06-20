@@ -58,6 +58,7 @@ module.exports = createCoreController("api::catagory.catagory", ({ strapi }) => 
           const udata = await strapi.plugins[
             "users-permissions"
           ].services.jwt.getToken(ctx);
+          console.log(udata);
   
           regid = udata.id;
         } catch (err) {

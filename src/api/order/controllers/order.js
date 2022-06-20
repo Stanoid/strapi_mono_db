@@ -6,7 +6,7 @@
 
 
 const { createCoreController } = require('@strapi/strapi').factories;
-
+const fetch = require('node-fetch');
 
 module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
@@ -58,6 +58,59 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
           
                 return res
               break;
+
+              case "getAdminOrders":
+
+                const requestOptions = {
+                  method: 'GET',
+                  headers: {
+                      "Content-Type": "application/json",
+                      "Authorization":   ctx.request.header.authorization
+                  },
+                };
+
+               
+                const responseprod = await  fetch('http://localhost:1338/api/users/me?populate=*', requestOptions);
+                const userData = await responseprod.json();
+            
+    if(userData.type==4){
+      const resa = await strapi.db.query("api::order.order").findMany({
+        select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","buyer_backup_number","qty","sale_price"],
+        populate: ["user", "product","product.stock"],
+      });
+     
+
+     
+      return resa;
+    }else{
+
+      return "gr8 job turd now i have your information"
+
+    }
+               
+                  // .then(response => response.json())
+                  // .then(data => {
+                
+                  //   console.log(data)
+                  //   return data
+                  // })
+                  // .catch(err => {
+                  //   return err
+                  // })
+                  // .finally(err => {
+                  // return err
+                  // })
+            
+              
+            
+
+                  // const udata = await strapi.plugins[
+                  //   "users-permissions"
+                  // ].services.jwt.getToken(ctx);
+         
+               
+              break;
+
 
               case "getVendorOrders":
 
@@ -128,7 +181,10 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       
     },
 
-    
+   
+
+
+   
 
     async create(ctx) {
 
