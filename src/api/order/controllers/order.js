@@ -69,8 +69,9 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
                   },
                 };
 
-               
-                const responseprod = await  fetch('https://bendari-back.herokuapp.com/api/users/me?populate=*', requestOptions);
+                // http://localhost:1338/api       
+                // https://bendari-back.herokuapp.com/api        
+                const responseprod = await  fetch('http://localhost:1338/api/users/me?populate=*', requestOptions);
                 const userData = await responseprod.json();
             
     if(userData.type==4){
@@ -299,6 +300,55 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         
             
             break;
+
+            case "confirmOrder":
+
+
+              // const resso = await strapi.db.query("api::order.order").findMany({
+              //   where:{
+              //  id:query.order
+              //   },
+              //     select: ["price"],
+              //     populate: ["user"],
+              //   });
+  
+
+              const requestOptions = {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization":   ctx.request.header.authorization
+                },
+              };
+
+              // http://localhost:1338/api       
+              // https://bendari-back.herokuapp.com/api        
+              const responseprod = await  fetch('https://bendari-back.herokuapp.com/api/users/me?populate=*', requestOptions);
+              const userData = await responseprod.json();
+          
+  if(userData.type==4){
+    const resoa = await strapi.db.query("api::order.order").update({
+      where:{
+     id:query.order
+      },
+      data:{
+        status:3,
+      
+      }
+      });
+
+      return resoa
+   
+
+   
+    
+  }else{
+
+    return "gr8 job turd now i have your information"
+
+  }
+
+              break;
 
 
             case "cancelSale":
