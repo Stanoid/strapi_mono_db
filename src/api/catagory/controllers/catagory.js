@@ -9,6 +9,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController("api::catagory.catagory", ({ strapi }) => ({
     async findOne(ctx) {
+
         const { id } = ctx.params;
     
         var url = require("url");
@@ -46,6 +47,59 @@ module.exports = createCoreController("api::catagory.catagory", ({ strapi }) => 
     
        
       },
+
+      
+    async create(ctx) {
+
+      let regid = null;
+
+      if (ctx.request && ctx.request.header && ctx.request.header.authorization) {
+        try {
+          const udata = await strapi.plugins[
+            "users-permissions"
+          ].services.jwt.getToken(ctx);
+  
+          regid = udata.id;
+        } catch (err) {
+          return "unauthorized request catch triggred";
+        }
+  
+        var url = require("url");
+        var url_parts = url.parse(ctx.request.url, true);
+        var query = url_parts.query;
+        switch (query.func) {
+          case "addcat":
+        let ress;
+        
+              const entity = await strapi.service("api::catagory.catagory").create({
+                  data:{
+                  
+                  
+                     Name:ctx.request.body.data.name,
+                     image:ctx.request.body.data.image,
+                    
+                  }
+                 
+           });
+           ress=entity
+              
+        
+        
+              return ress
+            break;
+  
+          default:
+            return "Defaulting from Authed, You screwed up badly fam (: ";
+            break;
+        }
+      } else {
+       return "unauthorized access."
+      }
+
+
+
+    
+  },
 
   }));
   
