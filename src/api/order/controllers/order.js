@@ -76,7 +76,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
             
     if(userData.type==4){
       const resa = await strapi.db.query("api::order.order").findMany({
-        select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","buyer_backup_number","qty","sale_price"],
+        select: ["price", "commission","status","buyers_name","buyers_address","buyers_phone","buyer_backup_number","qty","sale_price","createdAt"],
         populate: ["user", "product","product.stock"],
       });
      
