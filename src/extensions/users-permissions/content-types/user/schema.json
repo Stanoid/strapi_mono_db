@@ -114,6 +114,21 @@
     },
     "adress": {
       "type": "text"
+    },
+    "job": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer"
+    },
+    "gender": {
+      "type": "string"
+    },
+    "catagories": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::catagory.catagory",
+      "inversedBy": "users"
     }
   }
 }

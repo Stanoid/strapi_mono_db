@@ -23,6 +23,12 @@
     },
     "image": {
       "type": "json"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "catagories"
     }
   }
 }
