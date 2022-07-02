@@ -71,7 +71,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
                 // http://localhost:1338/api       
                 // https://bendari-back.herokuapp.com/api        
-                const responseprod = await  fetch('http://localhost:1338/api/users/me?populate=*', requestOptions);
+                const responseprod = await  fetch('https://bendari-back.herokuapp.com/api/users/me?populate=*', requestOptions);
                 const userData = await responseprod.json();
             
     if(userData.type==4){
@@ -323,7 +323,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
 
               // http://localhost:1338/api       
               // https://bendari-back.herokuapp.com/api        
-              const responseprod = await  fetch('http://localhost:1338/api/users/me?populate=*', requestOptions);
+              const responseprod = await  fetch('https://bendari-back.herokuapp.com/api/users/me?populate=*', requestOptions);
               const userData = await responseprod.json();
           
   if(userData.type==4){
