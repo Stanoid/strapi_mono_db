@@ -17,6 +17,7 @@
     "axios": "^0.26.0",
     "mysql": "2.18.1",
     "node-fetch": "^2.6.6",
+    "react-in-viewport": "^1.0.0-alpha.28",
     "strapi-plugin-import-export-content": "^0.4.2",
     "strapi-provider-upload-cloudinary": "^3.6.8"
   },
