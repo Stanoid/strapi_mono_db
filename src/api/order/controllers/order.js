@@ -85,7 +85,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
       return resa;
     }else{
 
-      return "gr8 job turd now i have your information"
+      return "gr8 job turd now i have your Data"
 
     }
                
