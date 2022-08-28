@@ -129,6 +129,12 @@
       "relation": "manyToMany",
       "target": "api::catagory.catagory",
       "inversedBy": "users"
+    },
+    "bnum": {
+      "type": "biginteger"
+    },
+    "Bname": {
+      "type": "string"
     }
   }
 }
