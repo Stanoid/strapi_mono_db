@@ -250,6 +250,11 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
         return "unauthorized request catch triggred" + err;
       }
 
+
+      //do a full assesment to the whole project once finished
+
+
+       
       var url = require("url");
       var url_parts = url.parse(ctx.request.url, true);
       var query = url_parts.query;
@@ -271,6 +276,7 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
               data: {
                 status: 2,
                 sale_price: ctx.request.body.data.salePrice,
+                
                 buyers_name: ctx.request.body.data.bName,
                 buyers_phone: ctx.request.body.data.bPhone,
                 buyer_backup_number: ctx.request.body.data.bbPhone,
@@ -303,6 +309,8 @@ module.exports = createCoreController("api::order.order", ({ strapi }) => ({
               Authorization: ctx.request.header.authorization,
             },
           };
+
+          //this is an obsolete peice of code thhat does not exempt every possible outcome all at once
 
           // http://localhost:1338/api
           // https://bendari-back.herokuapp.com/api
